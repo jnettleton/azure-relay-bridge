@@ -65,20 +65,21 @@ namespace Microsoft.Azure.Relay.Bridge.Test
                     }
                 });
 
-                var s = new TcpClient();
-                s.Connect("127.0.97.1", 29876);
-                var sstream = s.GetStream();
-                using (var w = new StreamWriter(sstream))
+                using (var s = new TcpClient())
                 {
-                    w.WriteLine("Hello!");
-                    w.Flush();
-                    using (var b = new StreamReader(sstream))
+                    s.Connect("127.0.97.1", 29876);
+                    var sstream = s.GetStream();
+                    using (var w = new StreamWriter(sstream))
                     {
-                        Assert.Equal("Hello!", b.ReadLine());
+                        w.WriteLine("Hello!");
+                        w.Flush();
+                        using (var b = new StreamReader(sstream))
+                        {
+                            Assert.Equal("Hello!", b.ReadLine());
+                        }
                     }
                 }
 
-                s.Dispose();
                 l.Stop();
             }
             finally
