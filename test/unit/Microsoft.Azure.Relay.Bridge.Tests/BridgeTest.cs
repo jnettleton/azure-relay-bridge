@@ -7,6 +7,7 @@ namespace Microsoft.Azure.Relay.Bridge.Test
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
+    using System.Threading;
     using Microsoft.Azure.Relay.Bridge.Configuration;
     using Microsoft.Azure.Relay.Bridge.Tests;
     using Xunit;
@@ -73,6 +74,8 @@ namespace Microsoft.Azure.Relay.Bridge.Test
                     {
                         w.WriteLine("Hello!");
                         w.Flush();
+                        Thread.Sleep(1);
+
                         using (var b = new StreamReader(sstream))
                         {
                             Assert.Equal("Hello!", b.ReadLine());
@@ -150,6 +153,7 @@ namespace Microsoft.Azure.Relay.Bridge.Test
                                 w.WriteLine("Hello!");
                                 w.Flush();
                                 s.Send(mw.GetBuffer(), (int)mw.Length);
+                                Thread.Sleep(1);
 
                                 IPEndPoint addr = null;
                                 var buf = s.Receive(ref addr);
